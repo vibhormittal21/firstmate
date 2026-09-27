@@ -1,0 +1,19 @@
+session=fm-lab-composer-81194-22260
+lab_home=/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.R7o5n1
+target=fm-lab-composer-81194-22260:w1:p2
+pre_exit_composer_verdict=empty
+pre_exit_agent_state=alive
+--- PRE-FIX fm-control.sh exit opencode-stop-probe ---
+prefix_control_exit_rc=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.R7o5n1
+error: task opencode-stop-probe's composer state is 'unknown', not proven empty; refusing to type the /exit exit command because it could concatenate onto existing text. Clear the composer, then retry 'exit'
+prefix_post_agent_state=alive
+--- FIXED fm-control.sh exit opencode-stop-probe ---
+control_exit_rc=0
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.R7o5n1
+stopped opencode-stop-probe harness=opencode backend=herdr endpoint=fm-lab-composer-81194-22260:w1:p2 worktree=/Users/vibhormittal/.no-mistakes/worktrees/4ab467ae808e/01M3J8S2ZW2PM5N6RQHHZ3A6V4
+--- opencode agent state after exit ---
+post_exit_agent_state=dead
+DONE
+--- teardown fm-lab-composer-81194-22260 ---
+--- remove lab home ---

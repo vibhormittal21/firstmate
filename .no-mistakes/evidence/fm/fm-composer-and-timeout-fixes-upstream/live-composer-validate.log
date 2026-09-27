@@ -1,0 +1,28 @@
+session=fm-lab-composer-69339-26485
+target=fm-lab-composer-69339-26485:w1:p2
+--- wait for the real idle composer through the adapter ---
+target_adapter_idle_verdict=empty
+opencode_version=opencode v2.0.18
+herdr_agent_identity=opencode	idle
+--- visible pane (plain) ---
+                                                                          ▄
+                                         █▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█
+                                         █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀
+                                         ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+                       ┃
+                       ┃  Ask anything… "What is the tech stack of this project?"
+                       ┃
+                       ┃  Build · DeepSeek V4.1 Flash DeepSeek
+                       ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                       …/4ab467ae80…/01M3J8S2ZW2PM5N6RQHHZ3A6V4  shift+tab agents  ctrl+p commands
+  ⊙ 5 plugins failed /plugins                                                                                   2.0.18
+live_idle_verdict_prefix=unknown
+live_idle_verdict_target=empty
+target_adapter_typed_verdict=pending
+live_typed_verdict_target=pending
+box_status_verdict_target=unknown
+dead_shell_verdict_target=unknown
+box_status_verdict_prefix=unknown
+dead_shell_verdict_prefix=unknown
+DONE
+--- teardown fm-lab-composer-69339-26485 ---
