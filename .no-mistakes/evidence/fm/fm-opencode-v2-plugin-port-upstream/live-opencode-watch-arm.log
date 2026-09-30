@@ -1,0 +1,12 @@
+# Live OpenCode v2 drive - watch-arm arming on a primary fixture
+opencode version: opencode v2.0.18
+lock owner pid written by the driving pty: 1715
+
+## arm launches recorded by the real bin/fm-watch-arm.sh
+arm-attempt args=--restart
+
+## guard runs (must be empty: an armed watcher owns continuity)
+(none - guard deferred to the armed arm)
+
+## guard blind-turn marker occurrences (expect 0 when armed)
+0

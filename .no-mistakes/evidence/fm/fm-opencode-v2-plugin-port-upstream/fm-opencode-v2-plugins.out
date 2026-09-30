@@ -1,0 +1,6 @@
+ok - all five OpenCode plugins export the v2-required { id, setup } default definition
+ok - fm-primary-pretool-check blocks by throwing on OpenCode v2's "shell" tool id, leaves "bash" and other tools alone, and hooks execute.before through ctx.tool.hook
+ok - fm-primary-cd-check blocks by throwing on OpenCode v2's "shell" tool id, leaves "bash" and other tools alone, and hooks execute.before through ctx.tool.hook
+ok - fm-primary-sessionstart-nudge reads session.created's v2 event.data.sessionID, injects the nudge exactly once per session through ctx.session.prompt, and nudges each new session independently
+ok - fm-primary-turnend-guard triggers on session.execution.succeeded/.failed/.interrupted (never .started), reads v2 event.data.sessionID, defers to an armed watch-arm coordinator, and otherwise runs the guard script and injects the encoded blind-turn follow-up exactly once per firing, skipping its own forced turn end while surviving and surfacing an unexpected error
+ok - fm-primary-watch-arm subscribes through ctx.event.subscribe, reads session.execution.*'s v2 event.data.sessionID, publishes a working ensureArmed coordinator, and on a primary root launches the arm with --restart for session.execution.succeeded, .failed, and .interrupted while .started launches nothing, without crashing outside a primary root

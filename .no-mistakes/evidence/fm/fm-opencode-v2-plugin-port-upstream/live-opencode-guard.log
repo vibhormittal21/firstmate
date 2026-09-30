@@ -1,0 +1,14 @@
+# Live OpenCode v2 drive - turn-end guard (non-primary fixture)
+opencode version: opencode v2.0.18
+
+## plugin script invocations (real bin/fm-*.sh run by the live plugins)
+nudge-ran
+guard-ran
+
+## real session user turns persisted by OpenCode (injected operational input)
+{"time":{"created":1790799405533},"text":"Reply with exactly PING","files":[],"agents":[]}
+{"time":{"created":1790799414412},"text":"LIVE_NUDGE_MARKER please reply with exactly ACK_NUDGE"}
+{"time":{"created":1790799420901},"text":"⁣FIRSTMATE_OP: v1 turn-end-guard: TURN WOULD END BLIND - supervision is off. The watcher cycle is missing, failed, or unhealthy. Follow th
+
+## guard blind-turn marker occurrences
+1
