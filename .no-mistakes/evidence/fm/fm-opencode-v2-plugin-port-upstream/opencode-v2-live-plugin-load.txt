@@ -1,0 +1,19 @@
+# Live OpenCode 2.0.18 run with the ported v2 plugins present
+
+Version: opencode v2.0.18
+Command (isolated lab project + lab FM_HOME, V2 permissions array config, --standalone):
+  OPENCODE_CONFIG_CONTENT='{"permissions":[{"action":"*","resource":"*","effect":"allow"}],"model":"opencode/big-pickle"}'
+  opencode run --standalone --print-logs --log-level debug --format json 'Reply with exactly the word PONG and nothing else.'
+
+## stdout (JSON event stream)
+{"type":"text","timestamp":1790767562250,"sessionID":"ses_f0def983cffe7v5Flgg17JQxLp","part":{"id":"prt_0f2106860001zY87C6zjFEKdBu_text-0","sessionID":"ses_f0def983cffe7v5Flgg17JQxLp","messageID":"msg_0f2106860001zY87C6zjFEKdBu","type":"text","text":"PONG","time":{"start":1790767558049,"end":1790767562250}}}
+
+## Real OpenCode plugin-load log lines for the ported plugins
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-cd-check.js entrypoint=file:///private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-cd-check.js http.span=27 role=server
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-pretool-check.js entrypoint=file:///private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-pretool-check.js http.span=27 role=server
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-sessionstart-nudge.js entrypoint=file:///private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-sessionstart-nudge.js http.span=27 role=server
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-turnend-guard.js entrypoint=file:///private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-turnend-guard.js http.span=28 role=server
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-watch-arm.js entrypoint=file:///private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-lab.Sc8QwD/project/.opencode/plugins/fm-primary-watch-arm.js http.span=30 role=server
+
+## Plugin-shape / load errors
+(none)

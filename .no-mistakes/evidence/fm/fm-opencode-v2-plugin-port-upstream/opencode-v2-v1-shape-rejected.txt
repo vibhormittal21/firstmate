@@ -1,0 +1,5 @@
+# Real OpenCode 2.0.18 rejects the legacy V1 plugin shape
+
+Plugin file: a minimal V1-shaped module (export const FmBusyState = async () => ({ event: ... }))
+
+level=WARN run=8aa11d87 message="failed to load plugin" target=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-oc-lab.uvzlUL/v1proj/.opencode/plugins/fm-busy-state.js ref=err_b9df25e9 cause="Cause([Fail(PluginModule.LoadError: Plugin must export a default definition with an id and an effect or setup function. (cause: SchemaError(Missing key\n  at [\"default\"])))])" http.span=62 role=server

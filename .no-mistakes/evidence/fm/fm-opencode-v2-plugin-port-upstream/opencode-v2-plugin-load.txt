@@ -1,0 +1,11 @@
+# Real OpenCode 2.0.18 plugin load + model turn (isolated project, --standalone)
+
+## 'loading plugin' lines (all five ported V2 plugins)
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-oc-lab.uvzlUL/project/.opencode/plugins/fm-primary-cd-check.js
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-oc-lab.uvzlUL/project/.opencode/plugins/fm-primary-pretool-check.js
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-oc-lab.uvzlUL/project/.opencode/plugins/fm-primary-sessionstart-nudge.js
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-oc-lab.uvzlUL/project/.opencode/plugins/fm-primary-turnend-guard.js
+msg="loading plugin" id=/private/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T/fm-oc-lab.uvzlUL/project/.opencode/plugins/fm-primary-watch-arm.js
+
+## model turn output (opencode run ... "reply with the single word PONG")
+PONG

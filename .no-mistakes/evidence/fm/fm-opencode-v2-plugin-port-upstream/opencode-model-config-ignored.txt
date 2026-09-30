@@ -1,0 +1,27 @@
+# Live: OPENCODE_CONFIG_CONTENT top-level "model" key vs the shipped launch config
+
+Real OpenCode 2.0.18, command: opencode run --standalone --format json --auto "say OK"
+Fresh isolated HOME/XDG per row, OPENCODE_DB per row, then read session_message.data.model.
+LongCat is the explicitly requested model; the loopback engine is space-bunny-free.
+
+OPENCODE_CONFIG_CONTENT / flag                           | model OpenCode actually used
+---------------------------------------------------------+----------------------------------
+--model opencode/longcat-2.5-preview-free   (CLI)        | opencode/longcat-2.5-preview-free
+{"model":"opencode/longcat-2.5-preview-free"}            | opencode/longcat-2.5-preview-free
+{"model":"opencode/longcat-2.5-preview-free"}  (repeat)  | opencode/longcat-2.5-preview-free
+{"zzz_unknown":1,"model":"opencode/longcat-2.5-preview-free"} | opencode/longcat-2.5-preview-free
+{"permission":{"*":"allow"},"model":"opencode/longcat-2.5-preview-free"} | opencode/longcat-2.5-preview-free
+{"permission":"allow","model":"opencode/longcat-2.5-preview-free"} | opencode/longcat-2.5-preview-free
+{"permission":"allow","model":"opencode/longcat-2.5-preview-free"} | opencode/longcat-2.5-preview-free
+{"permissions":[{action,resource,effect}],"model":"opencode/longcat-2.5-preview-free"} | opencode/space-bunny-free
+{"permissions":[{action,resource,effect}],"model":"opencode/longcat-2.5-preview-free"} | opencode/space-bunny-free
+{"permissions":[{action,resource,effect}],"model":"deepseek/deepseek-chat"} | opencode/space-bunny-free
+{"permissions":[{action,resource,effect}],"model":"bogus-provider/does-not-exist"} | opencode/longcat-2.5-preview-free
+{"permissions":[{action,resource,effect}]}   (no model key) | opencode/space-bunny-free
+
+Conclusion: whenever the shipped launch output includes the "permissions" (plural, array) key,
+OpenCode 2.0.18 ignores the whole OPENCODE_CONFIG_CONTENT and runs a default free model, so the
+configured worker model is not applied. Removing/replacing that key makes the same "model" value
+take effect, and the --model flag is honored directly.
+
+Official V2 schema (https://opencode.ai/config.json) lists "permission" (singular); "permissions" is absent.

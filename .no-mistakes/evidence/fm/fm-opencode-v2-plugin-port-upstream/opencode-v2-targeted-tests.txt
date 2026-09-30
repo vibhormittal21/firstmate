@@ -1,0 +1,12 @@
+# Targeted regression suites for the rebased OpenCode v2 port
+
+All seven suites below exited 0 with no `not ok` / `FAIL` lines.
+ok_count is the number of passed assertions (blank where only the exit status was recorded).
+
+- tests/fm-opencode-v2-plugins.test.sh        exit=0  ok=6   not_ok=0  (new port suite: v2 default-export shape + behavior of all five plugins)
+- tests/fm-pi-watch-extension.test.sh         exit=0  not_ok=0  (rebase-conflict file; includes the RECORD_KIND away/quiet cases and the 32 V1_ADAPTER-based plugin invocations)
+- tests/fm-turnend-guard.test.sh              exit=0  ok=89  not_ok=0
+- tests/fm-sessionstart-nudge.test.sh         exit=0  ok=25  not_ok=0
+- tests/fm-busy-adapter-wiring.test.sh        exit=0  ok=12  not_ok=0
+- tests/fm-spawn-dispatch-profile.test.sh     exit=0  ok=73  not_ok=0
+- tests/fm-test-run.test.sh                   exit=0  ok=42  not_ok=0  (changed-file selection for .opencode/plugins/* and tests/assets/*)

@@ -1,0 +1,27 @@
+# Real OpenCode 2.0.18 seatbelt block (fm-primary-pretool-check.js / execute.before)
+
+Config: OPENCODE_CONFIG_CONTENT='{"permissions":[{"action":"*","resource":"*","effect":"allow"}],"model":"deepseek/deepseek-chat"}'
+Command prompted: echo FM_LIVE_SEATBELT_BLOCK; touch <lab>/sentinel_ran
+
+## tool part persisted (status error, command never executed)
+{
+  "tool": "shell",
+  "status": "error",
+  "input": {
+    "command": "echo FM_LIVE_SEATBELT_BLOCK; touch /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-oc-lab.uvzlUL/sentinel_ran"
+  },
+  "error": "denied-live: echo FM_LIVE_SEATBELT_BLOCK; touch /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-oc-lab.uvzlUL/sentinel_ran",
+  "executed": false
+}
+
+## sentinel side-effect file
+ABSENT (blocked command never ran)
+
+## assistant summary
+The command was **blocked by the environment's safety mechanism** before it ran. The shell tool returned:
+
+```
+denied-live: echo FM_LIVE_SEATBELT_BLOCK; touch /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-oc-lab.uvzlUL/sentinel_ran
+```
+
+So there is no command output to show — nothing executed

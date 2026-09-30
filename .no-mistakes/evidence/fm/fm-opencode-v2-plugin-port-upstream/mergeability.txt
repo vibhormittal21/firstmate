@@ -1,0 +1,20 @@
+# Rebase mergeability and conflict-resolution evidence
+
+## Branch sits linearly on current upstream base origin/main
+$ git merge-base HEAD origin/main
+eb77f02b16aeca9533102070de34b1f8812f4fa2
+$ git rev-parse origin/main
+eb77f02b16aeca9533102070de34b1f8812f4fa2
+
+## Trial merge of origin/main + HEAD is clean (no conflicts)
+$ git merge-tree --write-tree --name-only origin/main HEAD
+5dcf171e364a09160cb9a1dac2ca81585c6544a5
+exit=0 (a single tree oid means clean; conflict output would list unmerged paths)
+
+## No conflict markers left in any tracked file
+$ git grep -nE '^(<<<<<<<|>>>>>>>)'
+(none)
+
+## Rebase conflict was resolved keeping BOTH sides on the same launch line
+$ git -C <worktree> grep -n 'V1_ADAPTER=.*RECORD_KIND=' tests/fm-pi-watch-extension.test.sh
+tests/fm-pi-watch-extension.test.sh:3720:  out=$(V1_ADAPTER="$ROOT/tests/assets/fm-opencode-v1-plugin-adapter.mjs" PLUGIN="$plugin" WORKTREE="$repo" FM_HOME="$home" FM_ARM_LOG="$log" FM_STOP_FILE="$stop" RECORD_KIND="$kind" node 2>&1 <<'EOF'

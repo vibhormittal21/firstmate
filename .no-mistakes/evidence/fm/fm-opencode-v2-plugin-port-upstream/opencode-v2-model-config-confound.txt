@@ -1,0 +1,24 @@
+# Correction: the shipped config's "permissions" array does not make OpenCode ignore the model
+
+An earlier round's opencode-model-config-ignored.txt concluded that the plural "permissions"
+array key in the shipped OPENCODE_CONFIG_CONTENT makes OpenCode 2.0.18 drop the whole config
+and fall back to a default free model. Re-running the same experiment in this turn shows that
+conclusion is a confound: the model they used (opencode/longcat-2.5-preview-free) is currently
+unavailable, so it falls back to opencode/space-bunny-free in EVERY config shape, not just the
+permissions-array shape, and even with the CLI --model flag.
+
+## Decisive experiment (real HOME, fresh OPENCODE_DB per row, --standalone, model read
+## from session_message.data.model for that row's session id)
+requested: opencode/longcat-2.5-preview-free
+cfg_array_longcat     {"permissions":[...],"model":longcat} -> space-bunny-free
+cfg_singular_longcat  {"permission":{...},"model":longcat}  -> space-bunny-free
+cfg_only_longcat      {"model":longcat}                     -> space-bunny-free
+cli_longcat           --model longcat                        -> command failed (model unavailable)
+
+## Control that isolates the array key: an available model is applied WITH the permissions array
+no_model              {"permissions":[...]}                 -> space-bunny-free (default)
+perms_array2          {"permissions":[...],"model":opencode/big-pickle} -> opencode/big-pickle
+
+Conclusion: OpenCode 2.0.18 accepts the shipped permissions-array config and still applies the
+"model" value. There is no shipped-config defect here; the earlier artifact reflected longcat's
+transient availability, not the permissions key.
