@@ -1,0 +1,9 @@
+scaffolded: /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO/data/ac-scout/brief.md (scout; replace {TASK} and {FIRSTMATE_SPEC})
+# Task
+## Captain's intent
+{TASK}
+
+## Firstmate spec
+{FIRSTMATE_SPEC}
+
+# Herdr lifecycle declaration - NOT ENABLED

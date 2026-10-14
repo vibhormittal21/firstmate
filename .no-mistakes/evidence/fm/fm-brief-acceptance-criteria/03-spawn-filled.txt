@@ -1,0 +1,55 @@
+## C: fully filled ship brief
+ok: added ac-ship (ship, repo notes) -> Queued
+task:
+  id: ac-ship
+  title: acceptance criteria lab
+  state: queued
+  blocked: no
+  blocked_by: none
+  held: no
+  hold_reason: "-"
+  hold_kind: "-"
+  hold_until: "-"
+  kind: ship
+  repo: notes
+  priority: "-"
+  created: 2026-10-15
+  closed: "-"
+  deps: none
+  links: none
+  body: ""
+help[2]:
+  - Run `tasks-axi start ac-ship` to move it to in flight
+  - Run `tasks-axi block ac-ship --by <other>` to record a dependency
+exit=0
+(eval):13: command not found: tmux
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO
+/Users/vibhormittal/.no-mistakes/worktrees/718807b38474/01M4Y52XPNMJH2RW9MPJGRFBYQ/bin/backends/tmux.sh: line 77: tmux: command not found
+/Users/vibhormittal/.no-mistakes/worktrees/718807b38474/01M4Y52XPNMJH2RW9MPJGRFBYQ/bin/backends/tmux.sh: line 99: tmux: command not found
+/Users/vibhormittal/.no-mistakes/worktrees/718807b38474/01M4Y52XPNMJH2RW9MPJGRFBYQ/bin/backends/tmux.sh: line 103: tmux: command not found
+exit=1
+/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO/data/ac-ship:
+brief.md
+launch-brief.md
+
+/var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO/state:
+## launch-brief.md rendered by fm-spawn for the filled brief (Task section)
+# Task
+## Captain's intent
+Add a count_notes() helper.
+
+## Firstmate spec
+### Requirements
+Add count_notes() in notes.py.
+
+### Acceptance criteria
+- count_notes() returns 2 after two adds; verify: python3 -c 'import notes'
+
+### Out of scope
+None.
+
+### Assumptions
+notes.py is a new module at the repo root (the ask did not name a file).
+
+
+# Herdr lifecycle declaration - NOT ENABLED

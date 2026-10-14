@@ -1,0 +1,19 @@
+scaffolded: /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO/data/ac-ship/brief.md (ship, mode=local-only; replace {TASK}, {FIRSTMATE_SPEC}, {ACCEPTANCE_CRITERIA}, {OUT_OF_SCOPE}, and {ASSUMPTIONS})
+# Task
+## Captain's intent
+{TASK}
+
+## Firstmate spec
+### Requirements
+{FIRSTMATE_SPEC}
+
+### Acceptance criteria
+{ACCEPTANCE_CRITERIA}
+
+### Out of scope
+{OUT_OF_SCOPE}
+
+### Assumptions
+{ASSUMPTIONS}
+
+# Herdr lifecycle declaration - NOT ENABLED

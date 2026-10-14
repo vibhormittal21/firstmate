@@ -1,0 +1,9 @@
+## A: spawn with only {TASK} and {FIRSTMATE_SPEC} filled
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO
+error: /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO/data/ac-ship/brief.md still contains a scaffold placeholder ({TASK}, {FIRSTMATE_SPEC}, {ACCEPTANCE_CRITERIA}, {OUT_OF_SCOPE}, or {ASSUMPTIONS}); fill ## Captain's intent and every part of ## Firstmate spec before spawn
+exit=1
+
+## B: Assumptions placeholder deleted, left empty, others filled
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO
+error: /var/folders/zq/drwr27xd6hg9yz2c74rxskym0000gn/T//fm-lab.36ncdO/data/ac-ship/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections, with every ### part under ## Firstmate spec filled (or a nonempty legacy # Task body) before spawn
+exit=1
