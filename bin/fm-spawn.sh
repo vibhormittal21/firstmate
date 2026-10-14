@@ -19,9 +19,11 @@
 #   yolo is inactive (bin/fm-project-mode.sh's header carries that decision). A
 #   registry entry the parser refuses stops the spawn rather than launching on a
 #   guessed posture. A
-#   ship or scout spawn also refuses leftover `{TASK}` / `{FIRSTMATE_SPEC}`
-#   placeholders, an empty Task, an incomplete pair of Task subsections, or a
-#   `## Captain's intent` line opening with a Captain label or address.
+#   ship or scout spawn also refuses a leftover scaffold placeholder (including
+#   a ship brief's unfilled Requirements, Acceptance criteria, Out of scope, or
+#   Assumptions part), an empty Task, an incomplete pair of Task subsections,
+#   an emptied spec part, or a `## Captain's intent` line opening with a
+#   Captain label or address.
 #   Every ship or scout spawn renders `launch-brief.md`; for a no-mistakes ship
 #   it also carries the current `--intent` contract and the extracted captain
 #   intent. A legacy mixed Task is accepted there only under bin/fm-dod-lib.sh's
@@ -3246,11 +3248,11 @@ fi
 }
 if [ "$KIND" = ship ] || [ "$KIND" = scout ]; then
   if fm_brief_task_placeholders_present "$BRIEF"; then
-    echo "error: $BRIEF still contains {TASK} or {FIRSTMATE_SPEC}; fill ## Captain's intent and ## Firstmate spec before spawn" >&2
+    echo "error: $BRIEF still contains a scaffold placeholder ({TASK}, {FIRSTMATE_SPEC}, {ACCEPTANCE_CRITERIA}, {OUT_OF_SCOPE}, or {ASSUMPTIONS}); fill ## Captain's intent and every part of ## Firstmate spec before spawn" >&2
     exit 1
   fi
   if ! fm_brief_task_content_valid "$BRIEF"; then
-    echo "error: $BRIEF must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn" >&2
+    echo "error: $BRIEF must contain nonempty ## Captain's intent and ## Firstmate spec subsections, with every ### part under ## Firstmate spec filled (or a nonempty legacy # Task body) before spawn" >&2
     exit 1
   fi
   if ADDRESS_LINE=$(fm_brief_intent_address_line "$BRIEF"); then

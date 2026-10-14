@@ -195,7 +195,7 @@ EOF
 # one of these DOD blocks, since a broken heredoc corrupts or empties the
 # generated brief content, not just the script's own syntax.
 test_ship_modes_generate_clean_briefs() {
-  local home id mode brief status
+  local home id mode brief status part token
   home="$TMP_ROOT/ship-home"
   write_registry "$home"
 
@@ -213,6 +213,12 @@ test_ship_modes_generate_clean_briefs() {
     assert_grep "{FIRSTMATE_SPEC}" "$brief" "$id: brief missing the {FIRSTMATE_SPEC} placeholder"
     assert_grep "## Captain's intent" "$brief" "$id: brief missing Captain's intent subsection"
     assert_grep "## Firstmate spec" "$brief" "$id: brief missing Firstmate spec subsection"
+    for part in "### Requirements" "### Acceptance criteria" "### Out of scope" "### Assumptions"; do
+      grep -qxF "$part" "$brief" || fail "$id: brief missing the $part spec part"
+    done
+    for token in "{ACCEPTANCE_CRITERIA}" "{OUT_OF_SCOPE}" "{ASSUMPTIONS}"; do
+      assert_grep "$token" "$brief" "$id: brief missing the $token placeholder"
+    done
     assert_grep 'never a bare number such as "PR 108"' "$brief" "$id: brief missing the full-PR-URL rule"
     assert_grep "mid-task \`working:\` line (including setup complete) is nonterminal" "$brief" \
       "$id: brief missing nonterminal working:/setup-complete gate protection"
@@ -664,7 +670,7 @@ test_herdr_lab_omission_is_loud_for_ship_and_scout() {
 # see the task text. Each placeholder must exist only at its genuine fill site,
 # so the documented fill leaves the gate intact and each body appears once.
 test_documented_global_replace_leaves_the_herdr_gate_intact() {
-  local home id brief kind count content filled body spec
+  local home id brief kind count content filled body spec token
   home="$TMP_ROOT/task-fill-site-home"
   mkdir -p "$home/data"
   body='Restart the herdr session, then profile it'
@@ -684,6 +690,13 @@ test_documented_global_replace_leaves_the_herdr_gate_intact() {
     count=$(grep -c -F '{FIRSTMATE_SPEC}' "$brief")
     [ "$count" = 1 ] \
       || fail "$kind brief must carry exactly one {FIRSTMATE_SPEC} fill site, found $count"
+    if [ "$kind" = ship ]; then
+      for token in '{ACCEPTANCE_CRITERIA}' '{OUT_OF_SCOPE}' '{ASSUMPTIONS}'; do
+        count=$(grep -c -F "$token" "$brief")
+        [ "$count" = 1 ] \
+          || fail "ship brief must carry exactly one $token fill site, found $count"
+      done
+    fi
     content=$(cat "$brief")
     filled=${content//'{TASK}'/$body}
     filled=${filled//'{FIRSTMATE_SPEC}'/$spec}
@@ -1095,6 +1108,8 @@ test_scout_and_secondmate_scaffold() {
   assert_grep "## Captain's intent" "$brief" "scout brief missing Captain's intent subsection"
   assert_grep "## Firstmate spec" "$brief" "scout brief missing Firstmate spec subsection"
   assert_grep "{FIRSTMATE_SPEC}" "$brief" "scout brief missing the spec placeholder"
+  assert_no_grep "{ACCEPTANCE_CRITERIA}" "$brief" \
+    "scout brief must not grow the ship-only acceptance criteria part"
 
   FM_SECONDMATE_CHARTER='Supervise the alpha domain.' \
     FM_HOME="$BRIEF_HOME" "$ROOT/bin/fm-brief.sh" brief-sm-q6 --secondmate alpha >/dev/null 2>&1 \

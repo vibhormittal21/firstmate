@@ -8,8 +8,14 @@
 # report, decision, or PR the ask refers to, without added speaker labels or
 # direct address) and `{FIRSTMATE_SPEC}`
 # under `## Firstmate spec` (build instructions, which are never the captain's
-# intent). bin/fm-dod-lib.sh owns the no-mistakes `--intent` contract those
-# subsections feed; bin/fm-spawn.sh refuses leftover placeholders and a
+# intent). A ship brief's `## Firstmate spec` is four parts instead of one fill:
+# `### Requirements` ({FIRSTMATE_SPEC}), `### Acceptance criteria`
+# ({ACCEPTANCE_CRITERIA}), `### Out of scope` ({OUT_OF_SCOPE}), and
+# `### Assumptions` ({ASSUMPTIONS}); AGENTS.md section 11 owns how Firstmate
+# fills them. Write "None." for a part that genuinely has nothing.
+# bin/fm-dod-lib.sh owns the no-mistakes
+# `--intent` contract those subsections feed; bin/fm-spawn.sh refuses leftover
+# placeholders, an emptied part, and a
 # `## Captain's intent` line opening with a Captain label or address. Secondmate
 # charters still use a single `{TASK}` charter fill. Firstmate may adjust other
 # sections when the task genuinely deviates (e.g. working an existing external
@@ -34,7 +40,7 @@
 #   Set FM_SECONDMATE_SCOPE='<scope>' to write a routing scope distinct from the charter text.
 #   --herdr-lab is mandatory when the task will issue Herdr lifecycle commands.
 #   It adds the hard isolation contract backed by bin/fm-herdr-lab.sh.
-#   The flag must be explicit because {TASK} and {FIRSTMATE_SPEC} are filled
+#   The flag must be explicit because the Task placeholders are filled
 #   after scaffolding and the caller-supplied repo string cannot reliably
 #   identify this repo. Briefs made without it carry a loud declaration so an
 #   omitted contract cannot be silent.
@@ -629,6 +635,25 @@ IFS= read -r -d '' TASK_SECTION <<'EOF' || true
 {FIRSTMATE_SPEC}
 EOF
 TASK_SECTION=${TASK_SECTION%$'\n'}
+IFS= read -r -d '' SHIP_TASK_SECTION <<'EOF' || true
+# Task
+## Captain's intent
+{TASK}
+
+## Firstmate spec
+### Requirements
+{FIRSTMATE_SPEC}
+
+### Acceptance criteria
+{ACCEPTANCE_CRITERIA}
+
+### Out of scope
+{OUT_OF_SCOPE}
+
+### Assumptions
+{ASSUMPTIONS}
+EOF
+SHIP_TASK_SECTION=${SHIP_TASK_SECTION%$'\n'}
 
 # One shared string keeps the ship and scout infrastructure rule identical.
 # Rule 2 governs file edits, so it does not prohibit pool administration.
@@ -747,7 +772,7 @@ DOD=$(fm_dod_block "$MODE" "$ID" "$BRANCH" "$FORGE" "$BASE_BRANCH" "$UPSTREAM_CO
 cat > "$BRIEF" <<EOF
 You are a crewmate: an autonomous worker agent managed by firstmate. Work on your own; do not wait for a human.
 
-$TASK_SECTION
+$SHIP_TASK_SECTION
 
 $HERDR_SECTION
 
@@ -798,9 +823,9 @@ $DOD
 EOF
 append_brief_include
 if [ "$FORGE" = none ]; then
-  echo "scaffolded: $BRIEF (ship, mode=$MODE; replace {TASK} and {FIRSTMATE_SPEC})"
+  echo "scaffolded: $BRIEF (ship, mode=$MODE; replace {TASK}, {FIRSTMATE_SPEC}, {ACCEPTANCE_CRITERIA}, {OUT_OF_SCOPE}, and {ASSUMPTIONS})"
 elif [ "$FORGE" = gerrit ]; then
-  echo "scaffolded: $BRIEF (ship, mode=$MODE forge=$FORGE shape=$SHAPE; replace {TASK} and {FIRSTMATE_SPEC})"
+  echo "scaffolded: $BRIEF (ship, mode=$MODE forge=$FORGE shape=$SHAPE; replace {TASK}, {FIRSTMATE_SPEC}, {ACCEPTANCE_CRITERIA}, {OUT_OF_SCOPE}, and {ASSUMPTIONS})"
 else
-  echo "scaffolded: $BRIEF (ship, mode=$MODE forge=$FORGE; replace {TASK} and {FIRSTMATE_SPEC})"
+  echo "scaffolded: $BRIEF (ship, mode=$MODE forge=$FORGE; replace {TASK}, {FIRSTMATE_SPEC}, {ACCEPTANCE_CRITERIA}, {OUT_OF_SCOPE}, and {ASSUMPTIONS})"
 fi

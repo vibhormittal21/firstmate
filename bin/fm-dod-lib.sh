@@ -89,9 +89,10 @@
 # The string passed must be self-sufficient - it plus the codebase reconstructs
 # roughly the same specification - so a report, decision, or PR the intent
 # refers to is written into it as substance, never left as a pointer.
-# bin/fm-brief.sh scaffolds those two `# Task` subsections; bin/fm-spawn.sh and
-# bin/fm-promote.sh refuse leftover `{TASK}` / `{FIRSTMATE_SPEC}` placeholders
-# and a `## Captain's intent` line opening with a Captain label or address
+# bin/fm-brief.sh scaffolds those two `# Task` subsections, plus the four ship
+# spec parts in FM_BRIEF_SPEC_PARTS; bin/fm-spawn.sh and bin/fm-promote.sh refuse
+# leftover scaffold placeholders, an emptied spec part, and a
+# `## Captain's intent` line opening with a Captain label or address
 # through the helpers below. Other mentions of `--intent` point here rather than
 # restating the rule.
 # Every heredoc here stays outside a command substitution: `VAR=$(cat <<EOF ...)`
@@ -223,15 +224,33 @@ fm_ship_rule_one() {  # <no-mistakes|direct-PR|local-only> <task-id> [branch] [<
   esac
 }
 
-# Return 0 when a Task subsection still consists only of its scaffold
-# placeholder. A missing file and legacy briefs carry no such placeholders.
+# The parts bin/fm-brief.sh scaffolds under a ship brief's `## Firstmate spec`.
+# Each part is optional so legacy and scout briefs stay valid, but a present
+# part must be filled.
+FM_BRIEF_SPEC_PARTS=("### Requirements" "### Acceptance criteria" "### Out of scope" "### Assumptions")
+
+# Print the body of one spec part; fail when the part is absent.
+fm_brief_spec_part_body() {  # <file> <part-heading>
+  local spec
+  spec=$(fm_brief_task_heading_body "$1" "## Firstmate spec")
+  fm_brief_heading_parse - "$2" present <<<"$spec" || return 1
+  fm_brief_heading_parse - "$2" body <<<"$spec"
+}
+
+# Return 0 when a Task subsection or spec part still consists only of its
+# scaffold placeholder. A missing file and legacy briefs carry no such placeholders.
 fm_brief_task_placeholders_present() {  # <file>
-  local file=$1 intent spec
+  local file=$1 intent spec part
   [ -f "$file" ] || return 1
   intent=$(fm_brief_task_heading_body "$file" "## Captain's intent")
   spec=$(fm_brief_task_heading_body "$file" "## Firstmate spec")
   [ "$(printf '%s' "$intent" | tr -d '[:space:]')" = '{TASK}' ] && return 0
   [ "$(printf '%s' "$spec" | tr -d '[:space:]')" = '{FIRSTMATE_SPEC}' ] && return 0
+  for part in "${FM_BRIEF_SPEC_PARTS[@]}"; do
+    case "$(fm_brief_spec_part_body "$file" "$part" | tr -d '[:space:]')" in
+      '{FIRSTMATE_SPEC}'|'{ACCEPTANCE_CRITERIA}'|'{OUT_OF_SCOPE}'|'{ASSUMPTIONS}') return 0 ;;
+    esac
+  done
   return 1
 }
 
@@ -288,10 +307,11 @@ EOF
   printf '%s\n' "$1"
 }
 
-# Accept the current two-subsection contract only when both bodies have content;
+# Accept the current two-subsection contract only when both bodies and every
+# present spec part have content;
 # briefs predating that contract remain valid when their # Task body has content.
 fm_brief_task_content_valid() {  # <file>
-  local file=$1 intent spec task has_intent=0 has_spec=0
+  local file=$1 intent spec task part body has_intent=0 has_spec=0
   [ -f "$file" ] && [ -r "$file" ] || return 1
   fm_brief_task_heading_present "$file" "## Captain's intent" && has_intent=1
   fm_brief_task_heading_present "$file" "## Firstmate spec" && has_spec=1
@@ -301,6 +321,10 @@ fm_brief_task_content_valid() {  # <file>
     spec=$(fm_brief_task_heading_body "$file" "## Firstmate spec")
     [ -n "$(printf '%s' "$intent" | tr -d '[:space:]')" ] || return 1
     [ -n "$(printf '%s' "$spec" | tr -d '[:space:]')" ] || return 1
+    for part in "${FM_BRIEF_SPEC_PARTS[@]}"; do
+      body=$(fm_brief_spec_part_body "$file" "$part") || continue
+      [ -n "$(printf '%s' "$body" | tr -d '[:space:]')" ] || return 1
+    done
     return 0
   fi
   task=$(fm_brief_heading_body "$file" "# Task")

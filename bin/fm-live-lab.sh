@@ -438,6 +438,8 @@ import os, sys
 path = sys.argv[1]
 text = open(path, encoding="utf-8").read()
 text = text.replace("{TASK}", os.environ["TASK_TEXT"], 1).replace("{FIRSTMATE_SPEC}", os.environ["SPEC_TEXT"], 1)
+text = text.replace("{ACCEPTANCE_CRITERIA}", "python3 -m unittest discover -s tests passes with the new count_notes() test.", 1)
+text = text.replace("{OUT_OF_SCOPE}", "Everything beyond count_notes() and its test.", 1).replace("{ASSUMPTIONS}", "None.", 1)
 open(path, "w", encoding="utf-8").write(text)
 PY
   (cd "$LAB" && lab_run FM_HOME="$LAB" "$LAB/bin/fm-tasks-axi.sh" add "$WORKER_ID" "lab gated worker" --kind ship --repo notes) >/dev/null || return 1

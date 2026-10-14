@@ -57,6 +57,9 @@ fill_brief_subsections() {  # <file> <intent> <spec>
   content=$(cat "$file")
   content=${content//'{TASK}'/$intent}
   content=${content//'{FIRSTMATE_SPEC}'/$spec}
+  content=${content//'{ACCEPTANCE_CRITERIA}'/The selected delivery path completes.}
+  content=${content//'{OUT_OF_SCOPE}'/None.}
+  content=${content//'{ASSUMPTIONS}'/None.}
   printf '%s\n' "$content" > "$file"
 }
 
@@ -571,7 +574,7 @@ EOF
 # public brief/spawn/promote path. Filling both subsections lets the spawn
 # delivery checks proceed (the fake tmux still fails later).
 test_spawn_and_promote_require_filled_task_subsections() {
-  local rec home proj fakebin out status id brief meta intent_body spec_body authorized
+  local rec home proj fakebin out status id brief meta intent_body spec_body authorized content
   rec=$(make_home subsections)
   IFS='|' read -r home proj fakebin <<EOF
 $rec
@@ -583,11 +586,44 @@ EOF
   out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode no-mistakes --yolo off)
   status=$?
   [ "$status" -ne 0 ] || fail "spawn of an unfilled ship brief should exit non-zero"
-  assert_contains "$out" "still contains {TASK} or {FIRSTMATE_SPEC}" \
+  assert_contains "$out" "still contains a scaffold placeholder" \
     "unfilled ship spawn did not name the leftover placeholders"
   assert_contains "$out" "## Captain's intent" \
     "unfilled ship spawn did not name the intent subsection to fill"
   assert_absent "$home/state/$id.meta" "unfilled ship spawn wrote task metadata"
+
+  # Filling only the intent and Requirements still leaves the acceptance
+  # criteria, out-of-scope, and assumptions parts unfilled.
+  id=delivery-unfilled-criteria
+  FM_HOME="$home" "$BRIEF" "$id" proj --mode direct-PR >/dev/null 2>&1 \
+    || fail "unfilled-criteria brief should scaffold"
+  content=$(cat "$home/data/$id/brief.md")
+  content=${content//'{TASK}'/Fix the bug.}
+  content=${content//'{FIRSTMATE_SPEC}'/Patch the parser.}
+  printf '%s\n' "$content" > "$home/data/$id/brief.md"
+  out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode direct-PR --yolo off)
+  status=$?
+  [ "$status" -ne 0 ] || fail "spawn of a brief with unfilled acceptance criteria should exit non-zero"
+  assert_contains "$out" "still contains a scaffold placeholder" \
+    "unfilled acceptance criteria were dispatched"
+  assert_contains "$out" "{ACCEPTANCE_CRITERIA}" \
+    "unfilled-criteria refusal did not name the acceptance criteria placeholder"
+  assert_absent "$home/state/$id.meta" "unfilled-criteria spawn wrote task metadata"
+
+  # Deleting a part's placeholder without writing anything is still unfilled.
+  id=delivery-emptied-part
+  FM_HOME="$home" "$BRIEF" "$id" proj --mode direct-PR >/dev/null 2>&1 \
+    || fail "emptied-part brief should scaffold"
+  content=$(cat "$home/data/$id/brief.md")
+  content=${content//'{ASSUMPTIONS}'/}
+  printf '%s\n' "$content" > "$home/data/$id/brief.md"
+  fill_brief_subsections "$home/data/$id/brief.md" "Fix the bug." "Patch the parser."
+  out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode direct-PR --yolo off)
+  status=$?
+  [ "$status" -ne 0 ] || fail "spawn of a brief with an emptied spec part should exit non-zero"
+  assert_contains "$out" "every ### part under ## Firstmate spec filled" \
+    "an emptied spec part was not rejected"
+  assert_absent "$home/state/$id.meta" "emptied-part spawn wrote task metadata"
 
   id=delivery-filled-ship
   FM_HOME="$home" "$BRIEF" "$id" proj --mode direct-PR >/dev/null 2>&1 \
@@ -596,7 +632,7 @@ EOF
     "Fix replacement of \`{TASK}\` in Herdr briefs." \
     "Keep literal \`{FIRSTMATE_SPEC}\` examples intact."
   out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode direct-PR --yolo off)
-  assert_not_contains "$out" "still contains {TASK} or {FIRSTMATE_SPEC}" \
+  assert_not_contains "$out" "still contains a scaffold placeholder" \
     "a filled ship brief mentioning placeholder tokens was refused as unfilled"
   assert_not_contains "$out" "must contain nonempty" \
     "a filled ship brief mentioning placeholder tokens failed content validation"
@@ -622,7 +658,7 @@ EOF
   out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode direct-PR --yolo off)
   assert_not_contains "$out" "must contain nonempty" \
     "fenced example headings made a filled legacy Task fail validation"
-  assert_not_contains "$out" "still contains {TASK} or {FIRSTMATE_SPEC}" \
+  assert_not_contains "$out" "still contains a scaffold placeholder" \
     "fenced example headings made a filled legacy Task look unfilled"
 
   id=delivery-legacy-no-mistakes
@@ -717,7 +753,7 @@ EOF
   out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --scout)
   status=$?
   [ "$status" -ne 0 ] || fail "spawn of an unfilled scout brief should exit non-zero"
-  assert_contains "$out" "still contains {TASK} or {FIRSTMATE_SPEC}" \
+  assert_contains "$out" "still contains a scaffold placeholder" \
     "unfilled scout spawn did not name the leftover placeholders"
   assert_absent "$home/state/$id.meta" "unfilled scout spawn wrote task metadata"
 

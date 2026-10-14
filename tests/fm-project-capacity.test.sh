@@ -505,7 +505,7 @@ test_failed_spawn_after_admission_holds_no_place() {
   printf '%s\n' '# Task' "## Captain's intent" '{TASK}' '' '## Firstmate spec' 'x' > "$home/data/task-a/brief.md"
   out=$(spawn_ship "$case_dir" task-a "$case_dir/unused") || rc=$?
   [ "$rc" -ne 0 ] && [ "$rc" -ne "$DEFER_EXIT" ] || fail "an invalid brief did not fail after admission (exit $rc): $out"
-  assert_contains "$out" "still contains {TASK}" "the spawn did not fail where expected"
+  assert_contains "$out" "still contains a scaffold placeholder" "the spawn did not fail where expected"
   assert_absent "$home/state/task-a.meta" "the failed spawn left a record"
   rc=0
   out=$(spawn_ship "$case_dir" task-b) || rc=$?
